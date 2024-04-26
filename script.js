@@ -13,6 +13,21 @@ let todos = [
   { id: 3, text: "Вивчити JavaScript", completed: false }
 ];
 
+// Перевірка, чи є дані в Local Storage при завантаженні сторінки
+window.onload = function() {
+  const savedTodos = JSON.parse(localStorage.getItem('todos'));
+  if (savedTodos) {
+    todos = savedTodos;
+    render();
+    updateCounter();
+  }
+}
+
+// Функція для збереження списку справ у Local Storage
+function saveTodos() {
+  localStorage.setItem('todos', JSON.stringify(todos));
+}
+
 // Функція для додавання нової справи
 function newTodo() {
   const text = prompt("Введіть нову справу:");
@@ -23,6 +38,7 @@ function newTodo() {
       completed: false
     };
     todos.push(newTodo);
+    saveTodos(); // Зберегти зміни в Local Storage
     render();
     updateCounter();
   }
@@ -48,6 +64,7 @@ function renderTodo(todo) {
 // Функція для видалення справи
 function deleteTodo(id) {
   todos = todos.filter(todo => todo.id !== id);
+  saveTodos(); // Зберегти зміни в Local Storage
   render();
   updateCounter();
 }
@@ -56,6 +73,7 @@ function deleteTodo(id) {
 function checkTodo(id) {
   const todo = todos.find(todo => todo.id === id);
   todo.completed = !todo.completed;
+  saveTodos(); // Зберегти зміни в Local Storage
   render();
   updateCounter();
 }
